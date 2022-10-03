@@ -1,20 +1,27 @@
 import { ChatForum } from '../component/chatForum';
 import bg3 from '../images/bg3.jpg';
-import { useState } from 'react';
-import io from 'socket.io-client';
+import { useState, useEffect, useContext } from 'react';
+import { useSocket } from '../context/SocketProvider';
+import { useConversations } from '../context/ConversationsProvider';
 
 export const Chats = () => {
-  const socket = io();
-  const [msg, setMsg] = useState([]);
-  console.log(msg);
-  socket.on('message', (message) => {
-    console.log(message);
-    setMsg([...msg, message]);
-  });
+  const [userId, setUserId] = useState();
+  const socket = useSocket();
+  const { message } = useConversations();
 
-  const chatSubmit = (chatText) => {
-    socket.emit('chatMessage', chatText);
-  };
+  useEffect(() => {
+    if (socket == null) return;
+
+    socket.on(
+      'connect',
+      () => {
+        setUserId(socket.id);
+      },
+      [socket]
+    );
+
+    return () => socket.off('connect');
+  }, [socket]);
 
   return (
     <div className='mt-2 grid grid-cols-12 mx-2'>
@@ -34,13 +41,18 @@ export const Chats = () => {
             backgroundImage: `url(${bg3})`,
           }}
         >
-          {msg
-            ? msg.map((m, index) => {
+          {userId ? (
+            <div className='bg-blue-300 text-lg pl-8'>User id:- {userId}</div>
+          ) : (
+            ''
+          )}
+          {message
+            ? message.map((m, index) => {
                 return <div key={index}>{m}</div>;
               })
             : ''}
         </div>
-        <ChatForum chatSubmit={chatSubmit} />
+        <ChatForum />
       </div>
     </div>
   );

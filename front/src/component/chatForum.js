@@ -1,18 +1,17 @@
 import { useState, useRef } from 'react';
-import { useAuthContext } from '../hooks/useAuthContext';
-import { useNotesContext } from '../hooks/useNotesContext';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import Input from '@mui/material/Input';
+import { useConversations } from '../context/ConversationsProvider';
 
 export const ChatForum = (props) => {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState('');
-  const { user } = useAuthContext();
-  const { dispatch } = useNotesContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const { sendMessage } = useConversations();
+
   const inputRef = useRef();
 
   const triggerFile = () => {
@@ -27,7 +26,7 @@ export const ChatForum = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.chatSubmit(text);
+    sendMessage(text);
     setText('');
   };
 
