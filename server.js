@@ -5,9 +5,8 @@ const io = require('socket.io')(4000, {
 });
 
 io.on('connection', (socket) => {
-  console.log(socket.id);
+  console.log(`Connected on ${socket.id}`);
   socket.on('send-message', (message) => {
     socket.broadcast.emit('receive-message', message);
-    console.log(message);
   });
 });

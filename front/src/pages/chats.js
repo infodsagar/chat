@@ -1,31 +1,17 @@
 import { ChatForum } from '../component/chatForum';
 import bg3 from '../images/bg3.jpg';
 import { useState, useEffect, useContext } from 'react';
-import { useSocket } from '../context/SocketProvider';
-import { useConversations } from '../context/ConversationsProvider';
+import { useChatContext } from '../context/localChat';
+import { BasicModal } from '../component/modal';
+import { useUserContext } from '../context/localUser';
 
 export const Chats = () => {
-  const [userId, setUserId] = useState();
-  const socket = useSocket();
-  const { message } = useConversations();
-
-  useEffect(() => {
-    if (socket == null) return;
-
-    socket.on(
-      'connect',
-      () => {
-        setUserId(socket.id);
-      },
-      [socket]
-    );
-
-    return () => socket.off('connect');
-  }, [socket]);
+  const { chat } = useChatContext();
+  const { user } = useUserContext();
 
   return (
     <div className='mt-2 grid grid-cols-12 mx-2'>
-      <div className='col-span-3 col-start-1  min-h-[80vh] px-1'>
+      <div className='col-span-3 col-start-1  min-h-[80vh]  px-1'>
         <h1 className='text-xl bg-lime-300 text-center font-medium rounded-lg mt-2'>
           Contact
         </h1>
@@ -36,24 +22,25 @@ export const Chats = () => {
       </div>
       <div className='col-span-9 col-start-4 ml-[1px]'>
         <div
-          className='border-2 border-blue-200 min-h-[80vh] overflow-y-auto overflow-x-hidden scroll-smooth'
+          className='border-2 border-blue-200 min-h-[80vh] max-h-[80vh] overflow-y-auto overflow-x-hidden scroll-smooth'
           style={{
             backgroundImage: `url(${bg3})`,
           }}
         >
-          {userId ? (
-            <div className='bg-blue-300 text-lg pl-8'>User id:- {userId}</div>
+          {user ? (
+            <div className='bg-blue-300 text-lg pl-8'>User id:- {user}</div>
           ) : (
             ''
           )}
-          {message
-            ? message.map((m, index) => {
-                return <div key={index}>{m}</div>;
+          {chat
+            ? chat.map((c, index) => {
+                return <div key={index}>{c}</div>;
               })
             : ''}
         </div>
         <ChatForum />
       </div>
+      {!user ? <BasicModal user={user} /> : ''}
     </div>
   );
 };
