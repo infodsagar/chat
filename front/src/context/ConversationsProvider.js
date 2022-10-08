@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useEffect } from 'react';
+import { useContext, createContext, useEffect } from 'react';
 import { useSocket } from './SocketProvider';
 import { useChatContext } from './localChat';
 

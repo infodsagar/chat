@@ -11,7 +11,7 @@ export const userReducer = (state, action) => {
     case 'LOGIN':
       return { user: action.payload };
     case 'LOGOUT':
-      return { user: '' };
+      return { user: null };
     default:
       return state;
   }
@@ -24,7 +24,6 @@ export const UserContextProvider = ({ children }) => {
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (user) {
-      console.log('set user');
       dispatch({ type: 'LOGIN', payload: user });
     }
   }, []);

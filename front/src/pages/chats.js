@@ -1,24 +1,25 @@
 import { ChatForum } from '../component/chatForum';
 import bg3 from '../images/bg3.jpg';
-import { useState, useEffect, useContext } from 'react';
 import { useChatContext } from '../context/localChat';
-import { BasicModal } from '../component/modal';
+import { LoginModal } from '../component/loginModal';
 import { useUserContext } from '../context/localUser';
+import SideMenu from '../component/sideMenu';
+import { useState } from 'react';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export const Chats = () => {
   const { chat } = useChatContext();
   const { user } = useUserContext();
+  const [mainOpen, setMainOpen] = useState(false);
 
   return (
     <div className='mt-2 grid grid-cols-12 mx-2'>
       <div className='col-span-3 col-start-1  min-h-[80vh]  px-1'>
-        <h1 className='text-xl bg-lime-300 text-center font-medium rounded-lg mt-2'>
-          Contact
+        <h1 className='text-xl bg-lime-300 text-center font-medium rounded-lg mt-2 flex justify-center'>
+          <AccountCircleIcon className='mt-[2px] mx-2' />
+          {user ? user : ''}
         </h1>
-        <ul className='mt-2'>
-          <li className='border-b-[1px] border-red-200 text-lg'>Sagar</li>
-          <li className='border-b-[1px] border-red-200 text-lg'>Leo</li>
-        </ul>
+        <SideMenu user={user} setMainOpen={setMainOpen} />
       </div>
       <div className='col-span-9 col-start-4 ml-[1px]'>
         <div
@@ -27,11 +28,6 @@ export const Chats = () => {
             backgroundImage: `url(${bg3})`,
           }}
         >
-          {user ? (
-            <div className='bg-blue-300 text-lg pl-8'>User id:- {user}</div>
-          ) : (
-            ''
-          )}
           {chat
             ? chat.map((c, index) => {
                 return <div key={index}>{c}</div>;
@@ -40,7 +36,11 @@ export const Chats = () => {
         </div>
         <ChatForum />
       </div>
-      {!user ? <BasicModal user={user} /> : ''}
+      {!user ? (
+        <LoginModal user={user} mainOpen={mainOpen} setMainOpen={setMainOpen} />
+      ) : (
+        ''
+      )}
     </div>
   );
 };

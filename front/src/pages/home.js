@@ -7,7 +7,7 @@ export const Home = () => {
           <div className='border-b-[2px] border-blue-400 shadow-md min-h-[4px]'></div>
         </span>
         <span className='text-lg mt-2 md:px-4 flex flex-col items-center md:flex-row sm:flex-row'>
-          <spann>Create personalised notes,</spann>
+          <span>Create personalised notes,</span>
           <span className='md:pl-1 sm:pl-1'> Access it from anywhere</span>
           <span className='md:pl-1 sm:pl-1'> & any device...</span>
         </span>

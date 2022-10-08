@@ -27,10 +27,9 @@ const style2 = {
   borderRadius: 10,
 };
 
-export const BasicModal = (props) => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export const LoginModal = (props) => {
+  const handleOpen = () => props.setMainOpen(true);
+  const handleClose = () => props.setMainOpen(false);
   const [userName, setUserName] = useState('');
   const [error, setError] = useState({ status: false, details: '' });
   const { dispatch } = useUserContext();
@@ -50,16 +49,16 @@ export const BasicModal = (props) => {
       localStorage.setItem('user', JSON.stringify(userName));
       dispatch({ type: 'LOGIN', payload: userName });
       setUserName('');
-      setOpen(false);
+      props.setMainOpen(false);
       setError({ status: false, details: '' });
     }
   };
 
   useEffect(() => {
     if (!props.user) {
-      setOpen(true);
+      props.setMainOpen(true);
     } else {
-      setOpen(false);
+      props.setMainOpen(false);
     }
   }, []);
 
@@ -67,7 +66,7 @@ export const BasicModal = (props) => {
     <div>
       <Button onClick={handleOpen}></Button>
       <Modal
-        open={open}
+        open={props.mainOpen}
         onClose={handleClose}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
