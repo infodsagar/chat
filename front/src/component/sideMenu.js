@@ -11,19 +11,18 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
+import PersonIcon from '@mui/icons-material/Person';
 import { useUserContext } from '../context/localUser';
 import { useChatContext } from '../context/localChat';
 import { ContactsModal } from './contactsModal';
 import { useState } from 'react';
-import { useContactsContext } from '../context/ContactsProvder';
-import PersonIcon from '@mui/icons-material/Person';
+import { useSocket } from '../context/SocketProvider';
 
 export default function SideMenu(props) {
   const [mainOpen, setMainOpen] = useState(false);
   const { dispatch } = useUserContext();
   const { dispatch: chatDispatch } = useChatContext();
-  const { contacts } = useContactsContext();
-  console.log(contacts);
+  const { allUsers, self } = useSocket();
 
   const handleLogout = () => {
     localStorage.setItem('user', null);
@@ -84,16 +83,16 @@ export default function SideMenu(props) {
             <ListItemText>Login</ListItemText>
           </MenuItem>
         )}
-        {contacts && props.user ? (
+        {allUsers && props.user ? (
           <div>
             <Divider />
-            {contacts.map((c, index) => {
+            {allUsers.map((u, index) => {
               return (
                 <MenuItem key={index}>
                   <ListItemIcon>
                     <PersonIcon fontSize='small' />
                   </ListItemIcon>
-                  <ListItemText>{c.name}</ListItemText>
+                  <ListItemText>{u.username}</ListItemText>
                 </MenuItem>
               );
             })}

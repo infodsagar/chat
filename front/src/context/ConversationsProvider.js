@@ -23,20 +23,20 @@ export function ConversationsProvider({ children }) {
   };
 
   //Waiting for message
-  useEffect(() => {
-    if (socket == null) return;
+  // useEffect(() => {
+  //   if (socket == null) return;
 
-    socket.on('receive-message', addMsg);
+  //   socket.on('receive-message', addMsg);
 
-    return () => socket.off('receive-message');
-  }, [socket, addMsg]);
+  //   return () => socket.off('receive-message');
+  // }, [socket, addMsg]);
 
   const value = {
     sendMessage: sendMessage,
   };
 
   return (
-    <ConversationsContext.Provider value={value}>
+    <ConversationsContext.Provider value={{ value, sendMessage }}>
       {children}
     </ConversationsContext.Provider>
   );

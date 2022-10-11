@@ -8,6 +8,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import InputLabel from '@mui/material/InputLabel';
 import { useEffect, useState } from 'react';
 import { useUserContext } from '../context/localUser';
+import { useSocket } from '../context/SocketProvider';
 
 const style = {
   position: 'absolute',
@@ -33,6 +34,7 @@ export const LoginModal = (props) => {
   const [userName, setUserName] = useState('');
   const [error, setError] = useState({ status: false, details: '' });
   const { dispatch } = useUserContext();
+  const { connectUser } = useSocket();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +48,7 @@ export const LoginModal = (props) => {
       });
       return;
     } else {
+      connectUser(userName);
       localStorage.setItem('user', JSON.stringify(userName));
       dispatch({ type: 'LOGIN', payload: userName });
       setUserName('');

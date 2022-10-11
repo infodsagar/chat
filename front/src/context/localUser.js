@@ -1,4 +1,5 @@
 import { createContext, useEffect, useReducer, useContext } from 'react';
+import { useSocket } from '../context/SocketProvider';
 
 export const UserContext = createContext();
 
@@ -19,12 +20,14 @@ export const userReducer = (state, action) => {
 
 export const UserContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, { user: null });
+  const { id, connectUser } = useSocket();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
 
-    if (user) {
+    if (user && !id) {
       dispatch({ type: 'LOGIN', payload: user });
+      connectUser(user);
     }
   }, []);
 
