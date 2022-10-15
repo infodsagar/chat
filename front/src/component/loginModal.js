@@ -7,8 +7,7 @@ import Input from '@mui/material/Input';
 import LoginIcon from '@mui/icons-material/Login';
 import InputLabel from '@mui/material/InputLabel';
 import { useEffect, useState } from 'react';
-import { useUserContext } from '../context/localUser';
-import { useSocket } from '../context/SocketProvider';
+import { useUsernameContext } from '../context/UsernameProvider';
 
 const style = {
   position: 'absolute',
@@ -31,34 +30,32 @@ const style2 = {
 export const LoginModal = (props) => {
   const handleOpen = () => props.setMainOpen(true);
   const handleClose = () => props.setMainOpen(false);
-  const [userName, setUserName] = useState('');
+  const [user, setUser] = useState('');
   const [error, setError] = useState({ status: false, details: '' });
-  const { dispatch } = useUserContext();
-  const { connectUser } = useSocket();
+  const { dispatch } = useUsernameContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (userName === '') {
+    if (user === '') {
       setError({ status: true, details: `Username can't be blank` });
       return;
-    } else if (userName.length < 8) {
+    } else if (user.length < 8) {
       setError({
         status: true,
         details: `Please enter 8 or more character`,
       });
       return;
     } else {
-      connectUser(userName);
-      localStorage.setItem('user', JSON.stringify(userName));
-      dispatch({ type: 'LOGIN', payload: userName });
-      setUserName('');
+      localStorage.setItem('username', JSON.stringify(user));
+      dispatch({ type: 'LOGIN', payload: user });
+      setUser('');
       props.setMainOpen(false);
       setError({ status: false, details: '' });
     }
   };
 
   useEffect(() => {
-    if (!props.user) {
+    if (!props.username) {
       props.setMainOpen(true);
     } else {
       props.setMainOpen(false);
@@ -85,9 +82,9 @@ export const LoginModal = (props) => {
               size='small'
               variant='filled'
               className='w-[100%]'
-              value={userName}
+              value={user}
               onChange={(e) => {
-                setUserName(e.target.value);
+                setUser(e.target.value);
               }}
             />
 

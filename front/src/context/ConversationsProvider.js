@@ -1,6 +1,5 @@
-import { useContext, createContext, useEffect } from 'react';
 import { useSocket } from './SocketProvider';
-import { useChatContext } from './localChat';
+import { useContext, createContext, useEffect, useState } from 'react';
 
 const ConversationsContext = createContext();
 
@@ -10,33 +9,50 @@ export function useConversations() {
 
 export function ConversationsProvider({ children }) {
   const socket = useSocket();
-  const { dispatch } = useChatContext();
+  const [id, setId] = useState();
+  const [usersList, setUsersList] = useState();
+  const [chat, setChat] = useState([]);
 
-  //Send Message
-  const sendMessage = (text) => {
-    socket.emit('send-message', { text });
-    addMsg(text);
+  //Connect user
+  const connectUser = () => {
+    socket.connect();
   };
 
-  const addMsg = (text) => {
-    dispatch({ type: 'ADD', payload: text });
+  //Send msg
+  const sendMsg = (msg) => {
+    socket.emit('send-message', msg);
+    setChat([...chat, msg]);
   };
 
-  //Waiting for message
-  // useEffect(() => {
-  //   if (socket == null) return;
-
-  //   socket.on('receive-message', addMsg);
-
-  //   return () => socket.off('receive-message');
-  // }, [socket, addMsg]);
-
-  const value = {
-    sendMessage: sendMessage,
+  //Disconnect user
+  const disconnectUser = () => {
+    socket.disconnect();
   };
+
+  useEffect(() => {
+    if (socket == null) return;
+    //On connect
+    socket.on('connection', (data) => {
+      setId(data.data);
+    });
+
+    //User list tracker
+    socket.on('usersList', (usersList) => {
+      setUsersList(usersList);
+    });
+
+    //On receive msg
+    socket.on('receive-message', (msg) => {
+      setChat([...chat, msg]);
+    });
+
+    return () => socket.off('receive-message');
+  }, [socket, sendMsg]);
 
   return (
-    <ConversationsContext.Provider value={{ value, sendMessage }}>
+    <ConversationsContext.Provider
+      value={{ sendMsg, disconnectUser, connectUser, id, usersList, chat }}
+    >
       {children}
     </ConversationsContext.Provider>
   );

@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
-import { useSocket } from '../context/SocketProvider';
+import { useConversations } from '../context/ConversationsProvider';
 
 const style = {
   '&:hover': {
@@ -63,10 +63,10 @@ SimpleDialog.propTypes = {
 
 export default function UserIdDialog(props) {
   const [open, setOpen] = useState(false);
-  const { id } = useSocket();
+  const { id } = useConversations();
 
   const handleClickOpen = () => {
-    if (props.user) {
+    if (props.username) {
       setOpen(true);
     }
   };
@@ -79,7 +79,7 @@ export default function UserIdDialog(props) {
     <div>
       <Button variant='outlined' onClick={handleClickOpen} sx={style}>
         <AccountCircleIcon className='mt-[1px] mx-2' />
-        {props.user ? props.user : ''}
+        {props.username ? props.username : ''}
       </Button>
       <SimpleDialog open={open} onClose={handleClose} id={id} />
     </div>

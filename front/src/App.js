@@ -5,14 +5,14 @@ import { Chats } from './pages/chats';
 import { SocketProvider } from './context/SocketProvider';
 import { ConversationsProvider } from './context/ConversationsProvider';
 import { ChatContextProvider } from './context/localChat';
-import { UserContextProvider } from './context/localUser';
+import { UsernameContextProvider } from './context/UsernameProvider';
 import { ContactsContextProvider } from './context/ContactsProvder';
 
 function App() {
   return (
     <>
-      <SocketProvider>
-        <UserContextProvider>
+      <UsernameContextProvider>
+        <SocketProvider>
           <ContactsContextProvider>
             <ChatContextProvider>
               <ConversationsProvider>
@@ -26,8 +26,8 @@ function App() {
               </ConversationsProvider>
             </ChatContextProvider>
           </ContactsContextProvider>
-        </UserContextProvider>
-      </SocketProvider>
+        </SocketProvider>
+      </UsernameContextProvider>
     </>
   );
 }

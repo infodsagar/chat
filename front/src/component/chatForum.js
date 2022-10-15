@@ -3,14 +3,14 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import Input from '@mui/material/Input';
-// import { useConversations } from '../context/ConversationsProvider';
+import { useConversations } from '../context/ConversationsProvider';
 
-export const ChatForum = (props) => {
+export const ChatForum = () => {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  // const { sendMessage } = useConversations();
+  const { sendMsg } = useConversations();
 
   const inputRef = useRef();
 
@@ -26,7 +26,7 @@ export const ChatForum = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // sendMessage(text);
+    sendMsg(text);
     setText('');
   };
 
