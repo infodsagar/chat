@@ -3,8 +3,11 @@ Web app for chatting
 
 Features:-
 Username setup and logout
-Add contact and delete contact
+Show all online user
 Create rooms and join rooms
+Public chat and priv chat with online user
+Easy to switch between priv and public mode
+Retain login and chat history using localstorage
 
 Tech:-
 Front-end designed using React and Material UI
