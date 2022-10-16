@@ -12,16 +12,38 @@ export function ConversationsProvider({ children }) {
   const [id, setId] = useState();
   const [usersList, setUsersList] = useState();
   const [chat, setChat] = useState([]);
+  const [privChat, setPrivChat] = useState({});
 
   //Connect user
   const connectUser = () => {
     socket.connect();
   };
 
-  //Send msg
+  //Send General msg
   const sendMsg = (msg) => {
     socket.emit('send-message', msg);
     setChat([...chat, msg]);
+  };
+
+  //Send Priv msg
+  const sendPrivMsg = (msg, username, receptionId, receptionUsername) => {
+    socket.emit('private-message', { msg, username, receptionId });
+    if (privChat.hasOwnProperty(receptionUsername)) {
+      setPrivChat({
+        [receptionUsername]: [...privChat[receptionUsername], msg],
+      });
+    } else {
+      setPrivChat({ [receptionUsername]: [msg] });
+    }
+  };
+
+  //Receive priv msg
+  const handlePriv = (msg, senderUsername, from) => {
+    if (privChat.hasOwnProperty(senderUsername)) {
+      setPrivChat({ [senderUsername]: [...privChat[senderUsername], msg] });
+    } else {
+      setPrivChat({ [senderUsername]: [msg] });
+    }
   };
 
   //Disconnect user
@@ -41,9 +63,14 @@ export function ConversationsProvider({ children }) {
       setUsersList(usersList);
     });
 
-    //On receive msg
+    //On receive general msg
     socket.on('receive-message', (msg) => {
       setChat([...chat, msg]);
+    });
+
+    //On receive private msg
+    socket.on('receive-priv-message', ({ msg, senderUsername, from }) => {
+      handlePriv(msg, senderUsername, from);
     });
 
     return () => socket.off('receive-message');
@@ -51,7 +78,16 @@ export function ConversationsProvider({ children }) {
 
   return (
     <ConversationsContext.Provider
-      value={{ sendMsg, disconnectUser, connectUser, id, usersList, chat }}
+      value={{
+        sendMsg,
+        sendPrivMsg,
+        disconnectUser,
+        connectUser,
+        id,
+        usersList,
+        chat,
+        privChat,
+      }}
     >
       {children}
     </ConversationsContext.Provider>

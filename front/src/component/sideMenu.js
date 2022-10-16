@@ -5,38 +5,41 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-
-import ContactsIcon from '@mui/icons-material/Contacts';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonIcon from '@mui/icons-material/Person';
 import { useUsernameContext } from '../context/UsernameProvider';
-import { useChatContext } from '../context/localChat';
-import { ContactsModal } from './contactsModal';
-import { useState } from 'react';
 import { useConversations } from '../context/ConversationsProvider';
+import PublicIcon from '@mui/icons-material/Public';
 
 export default function SideMenu(props) {
-  const [mainOpen, setMainOpen] = useState(false);
   const { dispatch } = useUsernameContext();
-  const { dispatch: chatDispatch } = useChatContext();
-  const { disconnectUser, usersList } = useConversations();
+  const { usersList } = useConversations();
 
   const handleLogout = () => {
     localStorage.setItem('username', null);
-    localStorage.setItem('chat', null);
     dispatch({ type: 'LOGOUT' });
-    chatDispatch({ type: 'DELETE' });
+    props.setMode('GENERAL');
+    props.setReceptionId('');
+    props.setReceptionUsername('');
   };
 
   const handleLogin = () => {
     props.setMainOpen(true);
   };
 
-  const handleContact = () => {
-    setMainOpen(true);
+  const handleClick = (u) => {
+    props.setMode('PRIVATE');
+    props.setReceptionId(u.userID);
+    props.setReceptionUsername(u.username);
+  };
+
+  const handleMode = () => {
+    props.setMode('GENERAL');
+    props.setReceptionId('');
+    props.setReceptionUsername('');
   };
 
   return (
@@ -44,12 +47,6 @@ export default function SideMenu(props) {
       <MenuList>
         {props.username ? (
           <div>
-            <MenuItem onClick={handleContact}>
-              <ListItemIcon>
-                <ContactsIcon fontSize='small' />
-              </ListItemIcon>
-              <ListItemText>Add Contact</ListItemText>
-            </MenuItem>
             <MenuItem>
               <ListItemIcon>
                 <MeetingRoomIcon fontSize='small' />
@@ -68,6 +65,7 @@ export default function SideMenu(props) {
         )}
 
         <Divider />
+
         {props.username ? (
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
@@ -83,19 +81,30 @@ export default function SideMenu(props) {
             <ListItemText>Login</ListItemText>
           </MenuItem>
         )}
+        {props.mode === 'PRIVATE' ? (
+          <MenuItem onClick={handleMode}>
+            <ListItemIcon>
+              <PublicIcon fontSize='small' />
+            </ListItemIcon>
+            <ListItemText>Public mode</ListItemText>
+          </MenuItem>
+        ) : (
+          ''
+        )}
         {usersList && props.username ? (
           <div>
             <Divider />
             {usersList.map((u, index) => {
-              if (u.username === 'null') {
-                return;
+              if (!u.username === 'null' || u.username === props.username) {
+                return <div key={index}>{''}</div>;
               } else {
                 return (
-                  <MenuItem key={index}>
+                  <MenuItem key={index} onClick={() => handleClick(u)}>
                     <ListItemIcon>
                       <PersonIcon fontSize='small' />
                     </ListItemIcon>
                     <ListItemText>{u.username}</ListItemText>
+                    <div className=' rounded-[50%] border-[5px] border-green-600 bg-green-600'></div>
                   </MenuItem>
                 );
               }
@@ -105,12 +114,6 @@ export default function SideMenu(props) {
           ''
         )}
       </MenuList>
-
-      {mainOpen ? (
-        <ContactsModal mainOpen={mainOpen} setMainOpen={setMainOpen} />
-      ) : (
-        ''
-      )}
     </Paper>
   );
 }

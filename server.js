@@ -41,10 +41,21 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('usersList', usersList);
   socket.emit('usersList', usersList);
 
-  //Wait for msg
+  //Waiting for general msg
   socket.on('send-message', (msg) => {
     console.log(msg);
     socket.broadcast.emit('receive-message', msg);
+  });
+
+  //Waiting for PRIV msg
+  socket.on('private-message', ({ msg, username, receptionId }) => {
+    socket
+      .to(receptionId)
+      .emit('receive-priv-message', {
+        msg,
+        senderUsername: username,
+        from: socket.id,
+      });
   });
 
   //Wait for disconnect

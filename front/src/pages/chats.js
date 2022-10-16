@@ -6,17 +6,27 @@ import { LoginModal } from '../component/loginModal';
 import { useState } from 'react';
 import { useUsernameContext } from '../context/UsernameProvider';
 import { useConversations } from '../context/ConversationsProvider';
+import { ChatRender } from '../component/chatRender';
 
 export const Chats = () => {
   const { username } = useUsernameContext();
   const [mainOpen, setMainOpen] = useState(false);
-  const { chat } = useConversations();
+  const [mode, setMode] = useState('GENERAL');
+  const [receptionId, setReceptionId] = useState();
+  const [receptionUsername, setReceptionUsername] = useState();
 
   return (
     <div className='mt-2 grid grid-cols-12 mx-2'>
       <div className='col-span-3 col-start-1  min-h-[80vh]  px-1'>
         <UserIdDialog username={username} />
-        <SideMenu username={username} setMainOpen={setMainOpen} />
+        <SideMenu
+          username={username}
+          setMainOpen={setMainOpen}
+          setReceptionId={setReceptionId}
+          setMode={setMode}
+          setReceptionUsername={setReceptionUsername}
+          mode={mode}
+        />
       </div>
       <div className='col-span-9 col-start-4 ml-[1px]'>
         <div
@@ -25,13 +35,18 @@ export const Chats = () => {
             backgroundImage: `url(${bg3})`,
           }}
         >
-          {chat && username
-            ? chat.map((c, index) => {
-                return <div key={index}>{c}</div>;
-              })
-            : ''}
+          <ChatRender
+            mode={mode}
+            username={username}
+            receptionUsername={receptionUsername}
+          />
         </div>
-        <ChatForum />
+        <ChatForum
+          mode={mode}
+          receptionId={receptionId}
+          username={username}
+          receptionUsername={receptionUsername}
+        />
       </div>
       {!username ? (
         <LoginModal

@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';

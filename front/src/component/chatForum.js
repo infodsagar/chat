@@ -5,12 +5,10 @@ import SendIcon from '@mui/icons-material/Send';
 import Input from '@mui/material/Input';
 import { useConversations } from '../context/ConversationsProvider';
 
-export const ChatForum = () => {
+export const ChatForum = (props) => {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { sendMsg } = useConversations();
+  const { sendMsg, sendPrivMsg } = useConversations();
 
   const inputRef = useRef();
 
@@ -22,12 +20,22 @@ export const ChatForum = () => {
   formdata.append('image', file);
   formdata.append('text', text);
 
-  const note = { text };
+  // const note = { text };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendMsg(text);
-    setText('');
+    if (props.mode === 'PRIVATE') {
+      sendPrivMsg(
+        text,
+        props.username,
+        props.receptionId,
+        props.receptionUsername
+      );
+      setText('');
+    } else {
+      sendMsg(text);
+      setText('');
+    }
   };
 
   return (
@@ -61,13 +69,11 @@ export const ChatForum = () => {
       <Button
         variant='contained'
         size='small'
-        disabled={isLoading}
         type='submit'
         endIcon={<SendIcon />}
       >
         Submit
       </Button>
-      {error}
     </form>
   );
 };
