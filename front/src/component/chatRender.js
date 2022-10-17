@@ -14,7 +14,7 @@ export const ChatRender = (props) => {
             : ''}
         </span>
       </div>
-      {props.mode === 'GENERAL' ? (
+      {props.mode === 'PUBLIC' ? (
         <div>
           {chat && props.username
             ? chat.map((c, index) => {

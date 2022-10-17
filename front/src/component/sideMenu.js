@@ -19,9 +19,11 @@ export default function SideMenu(props) {
   const { usersList } = useConversations();
 
   const handleLogout = () => {
+    localStorage.setItem('privChat', JSON.stringify({}));
+    localStorage.setItem('chat', JSON.stringify([]));
     localStorage.setItem('username', null);
     dispatch({ type: 'LOGOUT' });
-    props.setMode('GENERAL');
+    props.setMode('PUBLIC');
     props.setReceptionId('');
     props.setReceptionUsername('');
   };
@@ -37,7 +39,7 @@ export default function SideMenu(props) {
   };
 
   const handleMode = () => {
-    props.setMode('GENERAL');
+    props.setMode('PUBLIC');
     props.setReceptionId('');
     props.setReceptionUsername('');
   };

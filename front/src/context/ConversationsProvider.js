@@ -1,5 +1,6 @@
 import { useSocket } from './SocketProvider';
 import { useContext, createContext, useEffect, useState } from 'react';
+import LocalStorage from '../hooks/LocalStore';
 
 const ConversationsContext = createContext();
 
@@ -11,8 +12,8 @@ export function ConversationsProvider({ children }) {
   const socket = useSocket();
   const [id, setId] = useState();
   const [usersList, setUsersList] = useState();
-  const [chat, setChat] = useState([]);
-  const [privChat, setPrivChat] = useState({});
+  const [chat, setChat] = LocalStorage('chat', []);
+  const [privChat, setPrivChat] = LocalStorage('privChat', {});
 
   //Connect user
   const connectUser = () => {

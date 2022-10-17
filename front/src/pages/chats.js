@@ -11,7 +11,7 @@ import { ChatRender } from '../component/chatRender';
 export const Chats = () => {
   const { username } = useUsernameContext();
   const [mainOpen, setMainOpen] = useState(false);
-  const [mode, setMode] = useState('GENERAL');
+  const [mode, setMode] = useState('PUBLIC');
   const [receptionId, setReceptionId] = useState();
   const [receptionUsername, setReceptionUsername] = useState();
 
