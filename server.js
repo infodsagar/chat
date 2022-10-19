@@ -1,5 +1,7 @@
-const io = require('socket.io')('https://sagar-chat.herokuapp.com');
+//Import dotenv
+require('dotenv').config();
 const express = require('express');
+const io = require('socket.io')(process.env.PORT || 4000);
 const app = new express();
 
 // , {
