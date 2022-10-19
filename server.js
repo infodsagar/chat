@@ -1,8 +1,8 @@
 //Import dotenv
 require('dotenv').config();
-const express = require('express');
-const io = require('socket.io')(process.env.PORT || 4000);
-const app = new express();
+// const express = require('express');
+const io = require('socket.io')();
+// const app = new express();
 
 // , {
 //   cors: {
@@ -25,16 +25,16 @@ const app = new express();
 // });
 
 //Parse json
-app.use(express.json());
+// app.use(express.json());
 
 //Static assests
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('front/build'));
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static('front/build'));
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'front', 'build', 'index.html'));
-  });
-}
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'front', 'build', 'index.html'));
+//   });
+// }
 
 io.on('connection', (socket) => {
   const username = socket.handshake.query.username;
@@ -79,3 +79,5 @@ io.on('connection', (socket) => {
     console.log(`User left ${socket.id}`);
   });
 });
+
+io.listen(process.env.PORT || 4000);
