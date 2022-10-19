@@ -35,6 +35,7 @@ export const Navbar = () => {
   return (
     <>
       <div className='flex border-b-[1px] border-black shadow-md'>
+        
         <span className='ml-4 my-1 md:hidden'>
           <Button
             variant='contained'

@@ -1,12 +1,13 @@
-const io = require('socket.io')(4000, {
-  cors: {
-    origin: [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:3002',
-    ],
-  },
-});
+const io = require('socket.io')(4000);
+// , {
+//   cors: {
+//     origin: [
+//       'http://localhost:3000',
+//       'http://localhost:3001',
+//       'http://localhost:3002',
+//     ],
+//   },
+// });
 
 //Login Check middleware
 // io.use((socket, next) => {
@@ -17,6 +18,15 @@ const io = require('socket.io')(4000, {
 //   socket.username = username;
 //   next();
 // });
+
+//Static assests
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('frontend/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+  });
+}
 
 io.on('connection', (socket) => {
   const username = socket.handshake.query.username;
@@ -49,13 +59,11 @@ io.on('connection', (socket) => {
 
   //Waiting for PRIV msg
   socket.on('private-message', ({ msg, username, receptionId }) => {
-    socket
-      .to(receptionId)
-      .emit('receive-priv-message', {
-        msg,
-        senderUsername: username,
-        from: socket.id,
-      });
+    socket.to(receptionId).emit('receive-priv-message', {
+      msg,
+      senderUsername: username,
+      from: socket.id,
+    });
   });
 
   //Wait for disconnect
