@@ -4,8 +4,8 @@ require('dotenv').config();
 const io = require('socket.io')({
   cors: {
     origin: [
-      'https://sagar-chat.herokuapp.com/',
-      'https://sagar-chat.herokuapp.com',
+      'https://sagar-chat.netlify.app/chats',
+      'https://sagar-chat.netlify.app/chats/',
     ],
     methods: ['GET', 'POST'],
   },
