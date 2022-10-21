@@ -6,6 +6,8 @@ const io = require('socket.io')({
     origin: [
       'https://sagar-chat.netlify.app/chats',
       'https://sagar-chat.netlify.app/chats/',
+      'https://sagar-chat.netlify.app',
+      'https://sagar-chat.netlify.app/',
     ],
     methods: ['GET', 'POST'],
   },
