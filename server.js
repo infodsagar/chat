@@ -3,7 +3,10 @@ require('dotenv').config();
 // const express = require('express');
 const io = require('socket.io')({
   cors: {
-    origin: ['https://sagar-chat.herokuapp.com/'],
+    origin: [
+      'https://sagar-chat.herokuapp.com/',
+      'https://sagar-chat.herokuapp.com',
+    ],
     methods: ['GET', 'POST'],
   },
 });
