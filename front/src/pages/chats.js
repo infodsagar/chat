@@ -5,7 +5,6 @@ import { ChatForum } from '../component/chatForum';
 import { LoginModal } from '../component/loginModal';
 import { useState } from 'react';
 import { useUsernameContext } from '../context/UsernameProvider';
-import { useConversations } from '../context/ConversationsProvider';
 import { ChatRender } from '../component/chatRender';
 
 export const Chats = () => {

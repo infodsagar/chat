@@ -14,7 +14,6 @@ export function ConversationsProvider({ children }) {
   const [usersList, setUsersList] = useState();
   const [chat, setChat] = LocalStorage('chat', []);
   const [privChat, setPrivChat] = LocalStorage('privChat', {});
-  console.log(id);
 
   //Connect user
   const connectUser = () => {

@@ -1,18 +1,12 @@
 //Import dotenv
 require('dotenv').config();
 // const express = require('express');
-const io = require('socket.io')();
-// const app = new express();
-
-// , {
-//   cors: {
-//     origin: [
-//       'http://localhost:3000',
-//       'http://localhost:3001',
-//       'http://localhost:3002',
-//     ],
-//   },
-// });
+const io = require('socket.io')({
+  cors: {
+    origin: ['https://sagar-chat.herokuapp.com/'],
+    methods: ['GET', 'POST'],
+  },
+});
 
 //Login Check middleware
 // io.use((socket, next) => {

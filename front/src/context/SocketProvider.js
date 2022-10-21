@@ -11,7 +11,6 @@ export function useSocket() {
 export function SocketProvider({ children }) {
   const [socket, setSocket] = useState();
   const { username } = useUsernameContext();
-  console.log(socket);
 
   useEffect(() => {
     const newSocket = io('https://sagar-chat.herokuapp.com/', {
