@@ -31,8 +31,12 @@ function SimpleDialog(props) {
   };
 
   const handleListItemClick = () => {
-    navigator.clipboard.writeText(props.id);
-    handleSubOpen();
+    if (props.username && props.id) {
+      navigator.clipboard.writeText(props.id);
+      handleSubOpen();
+    } else {
+      props.setMainOpen(true);
+    }
   };
 
   const handleSubOpen = () => {
@@ -45,13 +49,23 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Your user ID:</DialogTitle>
-      <List sx={{ pt: 0 }}>
-        <ListItem autoFocus button onClick={() => handleListItemClick()}>
-          {props.id ? props.id : ''}
-        </ListItem>
-        {subOpen ? <ListItem>Text copied!</ListItem> : ''}
-      </List>
+      <DialogTitle>
+        {props.username && props.id ? 'Your user ID:' : 'Login Please'}
+      </DialogTitle>
+      {props.username && props.id ? (
+        <List sx={{ pt: 0 }}>
+          <ListItem autoFocus button onClick={() => handleListItemClick()}>
+            {props.id ? props.id : ''}
+          </ListItem>
+          {subOpen ? <ListItem>Text copied!</ListItem> : ''}
+        </List>
+      ) : (
+        <List sx={{ pt: 0 }}>
+          <ListItem autoFocus button onClick={() => handleListItemClick()}>
+            Login
+          </ListItem>
+        </List>
+      )}
     </Dialog>
   );
 }
@@ -66,8 +80,10 @@ export default function UserIdDialog(props) {
   const { id } = useConversations();
 
   const handleClickOpen = () => {
-    if (props.username) {
+    if (window.innerWidth >= 640) {
       setOpen(true);
+    } else {
+      props.setSideOpen(!props.sideOpen);
     }
   };
 
@@ -79,9 +95,15 @@ export default function UserIdDialog(props) {
     <div>
       <Button variant='outlined' onClick={handleClickOpen} sx={style}>
         <AccountCircleIcon className='mt-[1px] mx-2' />
-        {props.username ? props.username : ''}
+        <span className='pr-2'>{props.username ? props.username : ''}</span>
       </Button>
-      <SimpleDialog open={open} onClose={handleClose} id={id} />
+      <SimpleDialog
+        open={open}
+        onClose={handleClose}
+        id={id}
+        username={props.username}
+        setMainOpen={props.setMainOpen}
+      />
     </div>
   );
 }

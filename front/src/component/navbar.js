@@ -3,13 +3,19 @@ import DehazeIcon from '@mui/icons-material/Dehaze';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
+import CloseIcon from '@mui/icons-material/Close';
 import { useState, useRef, useEffect } from 'react';
+import UserIdDialog from '../component/userIdDialog';
+import { useUsernameContext } from '../context/UsernameProvider';
+import { useConversations } from '../context/ConversationsProvider';
 
 export const Navbar = () => {
-  const [open, setOpen] = useState(null);
+  const { username } = useUsernameContext();
 
+  const [open, setOpen] = useState(null);
   const ref1 = useRef();
   const ref2 = useRef();
+  const { sideOpen, setSideOpen } = useConversations();
 
   const handleDrop2 = () => {
     setOpen(!open);
@@ -34,26 +40,33 @@ export const Navbar = () => {
 
   return (
     <>
-      <div className='flex border-b-[1px] border-black shadow-md'>
-        
-        <span className='ml-4 my-1 md:hidden'>
+      <div className='flex border-b-[1px] border-black shadow-md min-h-[50px] items-center'>
+        {/* Burger menu for mobile nav*/}
+        <span className='ml-10 my-1 sm:hidden'>
           <Button
             variant='contained'
             size='small'
             onClick={handleDrop2}
             ref={ref2}
           >
-            <DehazeIcon />
+            {open ? <CloseIcon /> : <DehazeIcon />}
           </Button>
         </span>
+        <span className='ml-[auto] mr-10 my-1 sm:hidden'>
+          <UserIdDialog
+            username={username}
+            sideOpen={sideOpen}
+            setSideOpen={setSideOpen}
+          />
+        </span>
 
-        <span className='text-lg ml-4 md:ml-8 lg:ml-12 hidden md:flex  hover:border-b-blue-300 border-b-white border-b-[3px]'>
+        <span className='text-lg ml-4 md:ml-8 lg:ml-12 hidden sm:flex  hover:border-b-blue-300 border-b-white border-b-[3px]'>
           <Link to='/'>Home</Link>
         </span>
-        <span className='text-lg ml-4 md:ml-8 lg:ml-12 mr-2 hidden md:flex hover:border-b-blue-300 border-b-white border-b-[3px]'>
+        <span className='text-lg ml-4 md:ml-8 lg:ml-12 mr-2 hidden sm:flex hover:border-b-blue-300 border-b-white border-b-[3px]'>
           <Link to='/notes'>Notes</Link>
         </span>
-        <span className='text-lg ml-4 md:ml-8 lg:ml-12 mr-2 hidden md:flex hover:border-b-blue-300 border-b-white border-b-[3px]'>
+        <span className='text-lg ml-4 md:ml-8 lg:ml-12 mr-2 hidden sm:flex hover:border-b-blue-300 border-b-white border-b-[3px]'>
           <Link to='/chats'>Chats</Link>
         </span>
         <nav className='ml-auto mr-4 md:mr-6 hidden md:flex'></nav>
@@ -65,19 +78,26 @@ export const Navbar = () => {
             <ul
               className={
                 open
-                  ? 'py-4 px-10  md:hidden bg-white absolute border-black border-r-[1px] border-b-[1px] rounded-md shadow-md'
+                  ? 'py-4 px-20 z-10  md:hidden bg-white absolute border-black border-r-[1px] border-b-[1px] rounded-md shadow-md opacity-100'
                   : 'hidden'
               }
             >
               <li
-                className='mt-4 text-lg hover:border-b-blue-300 hover:border-b-[1px] '
+                className=' text-lg hover:border-b-blue-300 hover:border-b-[2px] '
                 onClick={handleDrop2}
               >
                 <Link to='/'>Home</Link>
               </li>
 
               <li
-                className='mt-4 text-lg hover:border-b-blue-300 hover:border-b-[1px]'
+                className='mt-4 text-lg hover:border-b-blue-300 hover:border-b-[2px]'
+                onClick={handleDrop2}
+              >
+                <Link to='/notes'>Notes</Link>
+              </li>
+
+              <li
+                className='mt-4 text-lg hover:border-b-blue-300 hover:border-b-[2px]'
                 onClick={handleDrop2}
               >
                 <Link to='/chats'>Chats</Link>

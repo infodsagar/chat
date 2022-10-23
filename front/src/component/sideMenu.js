@@ -16,32 +16,38 @@ import PublicIcon from '@mui/icons-material/Public';
 
 export default function SideMenu(props) {
   const { dispatch } = useUsernameContext();
-  const { usersList } = useConversations();
+  const { usersList, setPrivChat, setChat } = useConversations();
 
   const handleLogout = () => {
     localStorage.setItem('privChat', JSON.stringify({}));
     localStorage.setItem('chat', JSON.stringify({}));
     localStorage.setItem('username', null);
+    setChat({});
+    setPrivChat({});
     dispatch({ type: 'LOGOUT' });
     props.setMode('PUBLIC');
     props.setReceptionId('');
     props.setReceptionUsername('');
+    props.setSideOpen(false);
   };
 
   const handleLogin = () => {
     props.setMainOpen(true);
+    props.setSideOpen(false);
   };
 
   const handleClick = (u) => {
     props.setMode('PRIVATE');
     props.setReceptionId(u.userID);
     props.setReceptionUsername(u.username);
+    props.setSideOpen(false);
   };
 
   const handleMode = () => {
     props.setMode('PUBLIC');
     props.setReceptionId('');
     props.setReceptionUsername('');
+    props.setSideOpen(false);
   };
 
   return (

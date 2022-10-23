@@ -6,18 +6,20 @@ import { LoginModal } from '../component/loginModal';
 import { useState } from 'react';
 import { useUsernameContext } from '../context/UsernameProvider';
 import { ChatRender } from '../component/chatRender';
+import { useConversations } from '../context/ConversationsProvider';
 
 export const Chats = () => {
   const { username } = useUsernameContext();
   const [mainOpen, setMainOpen] = useState(false);
-  const [mode, setMode] = useState('PUBLIC');
-  const [receptionId, setReceptionId] = useState();
-  const [receptionUsername, setReceptionUsername] = useState();
+  const [mode, setMode] = useState('PUBLIC'); //Mode tracker
+  const [receptionId, setReceptionId] = useState(); //Priv message receiver ID
+  const [receptionUsername, setReceptionUsername] = useState(); //Receiver username
+  const { sideOpen, setSideOpen } = useConversations();
 
   return (
     <div className='mt-2 grid grid-cols-12 mx-2'>
-      <div className='col-span-3 col-start-1  min-h-[80vh]  px-1'>
-        <UserIdDialog username={username} />
+      <div className='col-start-1 sm:col-span-5 md:col-span-3 md:col-start-2  min-h-[80vh] px-1 hidden sm:flex flex-col'>
+        <UserIdDialog username={username} setMainOpen={setMainOpen} />
         <SideMenu
           username={username}
           setMainOpen={setMainOpen}
@@ -27,9 +29,9 @@ export const Chats = () => {
           mode={mode}
         />
       </div>
-      <div className='col-span-9 col-start-4 ml-[1px]'>
+      <div className='col-span-12 col-start-1 sm:col-span-7 sm:col-start-6 md:col-span-7 md:col-start-5 ml-[1px]'>
         <div
-          className='border-2 border-blue-200 min-h-[80vh] max-h-[80vh] overflow-y-auto overflow-x-hidden scroll-smooth'
+          className='border-2 border-blue-200 min-h-[77vh] max-h-[77vh] overflow-y-auto overflow-x-hidden scroll-smooth'
           style={{
             backgroundImage: `url(${bg3})`,
           }}
@@ -45,6 +47,23 @@ export const Chats = () => {
           receptionId={receptionId}
           username={username}
           receptionUsername={receptionUsername}
+        />
+      </div>
+      <div
+        className={
+          sideOpen
+            ? 'absolute right-1 ml-[50%]  px-1 sm:hidden min-h-[80vh]'
+            : 'hidden'
+        }
+      >
+        <SideMenu
+          username={username}
+          setMainOpen={setMainOpen}
+          setReceptionId={setReceptionId}
+          setMode={setMode}
+          setReceptionUsername={setReceptionUsername}
+          mode={mode}
+          setSideOpen={setSideOpen}
         />
       </div>
       {!username ? (

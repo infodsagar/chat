@@ -14,9 +14,11 @@ export function ConversationsProvider({ children }) {
   const [usersList, setUsersList] = useState();
   const [chat, setChat] = LocalStorage('chat', {});
   const [privChat, setPrivChat] = LocalStorage('privChat', {});
+  const [sideOpen, setSideOpen] = useState(false); //Track mobile sidemenu display status
 
   //Connect user
   const connectUser = () => {
+    console.log('attempted');
     socket.connect();
   };
 
@@ -104,6 +106,10 @@ export function ConversationsProvider({ children }) {
         usersList,
         chat,
         privChat,
+        setChat,
+        setPrivChat,
+        sideOpen,
+        setSideOpen,
       }}
     >
       {children}
