@@ -12,7 +12,7 @@ export function ConversationsProvider({ children }) {
   const socket = useSocket();
   const [id, setId] = useState();
   const [usersList, setUsersList] = useState();
-  const [chat, setChat] = LocalStorage('chat', []);
+  const [chat, setChat] = LocalStorage('chat', {});
   const [privChat, setPrivChat] = LocalStorage('privChat', {});
 
   //Connect user
@@ -23,7 +23,11 @@ export function ConversationsProvider({ children }) {
   //Send General msg
   const sendMsg = (msg) => {
     socket.emit('send-message', msg);
-    setChat([...chat, msg]);
+    if (Object.keys(chat).length > 0) {
+      setChat({ ...chat, [`s${Object.keys(chat).length + 1}`]: msg });
+    } else {
+      setChat({ s1: msg });
+    }
   };
 
   //Send Priv msg
@@ -31,19 +35,27 @@ export function ConversationsProvider({ children }) {
     socket.emit('private-message', { msg, username, receptionId });
     if (privChat.hasOwnProperty(receptionUsername)) {
       setPrivChat({
-        [receptionUsername]: [...privChat[receptionUsername], msg],
+        [receptionUsername]: {
+          ...privChat[receptionUsername],
+          [`s${Object.keys(privChat[receptionUsername]).length + 1}`]: msg,
+        },
       });
     } else {
-      setPrivChat({ [receptionUsername]: [msg] });
+      setPrivChat({ [receptionUsername]: { s1: msg } });
     }
   };
 
   //Receive priv msg
   const handlePriv = (msg, senderUsername, from) => {
     if (privChat.hasOwnProperty(senderUsername)) {
-      setPrivChat({ [senderUsername]: [...privChat[senderUsername], msg] });
+      setPrivChat({
+        [senderUsername]: {
+          ...privChat[senderUsername],
+          [`r${Object.keys(privChat[senderUsername]).length + 1}`]: msg,
+        },
+      });
     } else {
-      setPrivChat({ [senderUsername]: [msg] });
+      setPrivChat({ [senderUsername]: { r1: msg } });
     }
   };
 
@@ -66,7 +78,11 @@ export function ConversationsProvider({ children }) {
 
     //On receive general msg
     socket.on('receive-message', (msg) => {
-      setChat([...chat, msg]);
+      if (Object.keys(chat).length > 0) {
+        setChat({ ...chat, [`r${Object.keys(chat).length + 1}`]: msg });
+      } else {
+        setChat({ r1: msg });
+      }
     });
 
     //On receive private msg

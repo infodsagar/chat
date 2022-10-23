@@ -13,7 +13,7 @@ export function SocketProvider({ children }) {
   const { username } = useUsernameContext();
 
   useEffect(() => {
-    const newSocket = io('https://sagar-chat.herokuapp.com/', {
+    const newSocket = io('', {
       query: { username },
     });
 

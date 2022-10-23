@@ -20,7 +20,7 @@ export default function SideMenu(props) {
 
   const handleLogout = () => {
     localStorage.setItem('privChat', JSON.stringify({}));
-    localStorage.setItem('chat', JSON.stringify([]));
+    localStorage.setItem('chat', JSON.stringify({}));
     localStorage.setItem('username', null);
     dispatch({ type: 'LOGOUT' });
     props.setMode('PUBLIC');
