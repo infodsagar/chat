@@ -1,5 +1,5 @@
 import { useSocket } from './SocketProvider';
-import { useContext, createContext, useEffect, useState } from 'react';
+import { useContext, createContext, useEffect, useState, useRef } from 'react';
 import LocalStorage from '../hooks/LocalStore';
 
 const ConversationsContext = createContext();
@@ -15,6 +15,7 @@ export function ConversationsProvider({ children }) {
   const [chat, setChat] = LocalStorage('chat', {});
   const [privChat, setPrivChat] = LocalStorage('privChat', {});
   const [sideOpen, setSideOpen] = useState(false); //Track mobile sidemenu display status
+  const ref3 = useRef();
 
   //Connect user
   const connectUser = () => {
@@ -110,6 +111,7 @@ export function ConversationsProvider({ children }) {
         setPrivChat,
         sideOpen,
         setSideOpen,
+        ref3,
       }}
     >
       {children}

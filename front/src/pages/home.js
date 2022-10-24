@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 export const Home = () => {
   return (
     <>
@@ -7,9 +8,12 @@ export const Home = () => {
           <div className='border-b-[2px] border-blue-400 shadow-md min-h-[4px]'></div>
         </span>
         <span className='text-lg mt-2 md:px-4 flex flex-col items-center md:flex-row sm:flex-row'>
-          <span>Create personalised notes,</span>
-          <span className='md:pl-1 sm:pl-1'> Access it from anywhere</span>
-          <span className='md:pl-1 sm:pl-1'> & any device...</span>
+          <span>Make new friends</span>
+          {/* <span className='md:pl-1 sm:pl-1'>Create Public chat </span>
+          <span className='md:pl-1 sm:pl-1'> or Private...</span> */}
+          <span className='md:pl-1 sm:pl-1 text-blue underline text:lg'>
+            <Link to='/chats'>Let's Start Chat...</Link>
+          </span>
         </span>
       </div>
     </>

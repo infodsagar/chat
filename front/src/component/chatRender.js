@@ -1,19 +1,23 @@
 import { useConversations } from '../context/ConversationsProvider';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import Button from '@mui/material/Button';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useEffect, useRef } from 'react';
 
 export const ChatRender = (props) => {
   const { chat, privChat } = useConversations();
   const regex = new RegExp('^[s].*');
+  const bottomRef = useRef(null);
 
   const handleClick = () => {
     props.setSideOpen(!props.sideOpen);
   };
 
+  useEffect(() => {
+    // 👇️ scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chat]);
+
   return (
     <>
-      <div className='bg-blue-100 flex'>
+      <div className='bg-blue-100 flex fixed '>
         <span className='pr-6 ml-[auto]'>Mode: {props.mode}</span>
         <span className='mr-4'>
           {props.receptionUsername ? `User: ${props.receptionUsername}` : ''}
@@ -42,6 +46,7 @@ export const ChatRender = (props) => {
                 }
               })
             : ''}
+          <div ref={bottomRef} />
         </div>
       ) : (
         <div className='mt-3 mx-3'>

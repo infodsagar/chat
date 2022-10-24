@@ -16,7 +16,7 @@ import PublicIcon from '@mui/icons-material/Public';
 
 export default function SideMenu(props) {
   const { dispatch } = useUsernameContext();
-  const { usersList, setPrivChat, setChat } = useConversations();
+  const { usersList, setPrivChat, setChat, id } = useConversations();
 
   const handleLogout = () => {
     localStorage.setItem('privChat', JSON.stringify({}));
@@ -55,6 +55,9 @@ export default function SideMenu(props) {
       <MenuList>
         {props.username ? (
           <div>
+            <span className='pl-4 sm:hidden'>ID:</span>
+            <span className='ml-4 sm:hidden'>{id ? id : ''}</span>
+
             <MenuItem>
               <ListItemIcon>
                 <MeetingRoomIcon fontSize='small' />

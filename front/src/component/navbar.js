@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -15,7 +15,8 @@ export const Navbar = () => {
   const [open, setOpen] = useState(null);
   const ref1 = useRef();
   const ref2 = useRef();
-  const { sideOpen, setSideOpen } = useConversations();
+  const { sideOpen, setSideOpen, ref3 } = useConversations();
+  const location = useLocation(); //Get current route path
 
   const handleDrop2 = () => {
     setOpen(!open);
@@ -42,7 +43,7 @@ export const Navbar = () => {
     <>
       <div className='flex border-b-[1px] border-black shadow-md min-h-[50px] items-center'>
         {/* Burger menu for mobile nav*/}
-        <span className='ml-10 my-1 sm:hidden'>
+        <span className='ml-2 sm:ml-10 my-1 sm:hidden'>
           <Button
             variant='contained'
             size='small'
@@ -52,13 +53,17 @@ export const Navbar = () => {
             {open ? <CloseIcon /> : <DehazeIcon />}
           </Button>
         </span>
-        <span className='ml-[auto] mr-10 my-1 sm:hidden'>
-          <UserIdDialog
-            username={username}
-            sideOpen={sideOpen}
-            setSideOpen={setSideOpen}
-          />
-        </span>
+        {location.pathname === '/chats' ? (
+          <span className='ml-[auto] mr-4 sm:mr-10 my-1 sm:hidden' ref={ref3}>
+            <UserIdDialog
+              username={username}
+              sideOpen={sideOpen}
+              setSideOpen={setSideOpen}
+            />
+          </span>
+        ) : (
+          ''
+        )}
 
         <span className='text-lg ml-4 md:ml-8 lg:ml-12 hidden sm:flex  hover:border-b-blue-300 border-b-white border-b-[3px]'>
           <Link to='/'>Home</Link>
@@ -89,12 +94,12 @@ export const Navbar = () => {
                 <Link to='/'>Home</Link>
               </li>
 
-              <li
+              {/* <li
                 className='mt-4 text-lg hover:border-b-blue-300 hover:border-b-[2px]'
                 onClick={handleDrop2}
               >
                 <Link to='/notes'>Notes</Link>
-              </li>
+              </li> */}
 
               <li
                 className='mt-4 text-lg hover:border-b-blue-300 hover:border-b-[2px]'
