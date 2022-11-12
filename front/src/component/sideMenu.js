@@ -106,7 +106,7 @@ export default function SideMenu(props) {
           <div>
             <Divider />
             {usersList.map((u, index) => {
-              if (!u.username === 'null' || u.username === props.username) {
+              if (u.username === 'null' || u.username === props.username) {
                 return <div key={index}>{''}</div>;
               } else {
                 return (

@@ -69,9 +69,6 @@ export const Navbar = () => {
           <Link to='/'>Home</Link>
         </span>
         <span className='text-lg ml-4 md:ml-8 lg:ml-12 mr-2 hidden sm:flex hover:border-b-blue-300 border-b-white border-b-[3px]'>
-          <Link to='/notes'>Notes</Link>
-        </span>
-        <span className='text-lg ml-4 md:ml-8 lg:ml-12 mr-2 hidden sm:flex hover:border-b-blue-300 border-b-white border-b-[3px]'>
           <Link to='/chats'>Chats</Link>
         </span>
         <nav className='ml-auto mr-4 md:mr-6 hidden md:flex'></nav>
@@ -93,13 +90,6 @@ export const Navbar = () => {
               >
                 <Link to='/'>Home</Link>
               </li>
-
-              {/* <li
-                className='mt-4 text-lg hover:border-b-blue-300 hover:border-b-[2px]'
-                onClick={handleDrop2}
-              >
-                <Link to='/notes'>Notes</Link>
-              </li> */}
 
               <li
                 className='mt-4 text-lg hover:border-b-blue-300 hover:border-b-[2px]'
